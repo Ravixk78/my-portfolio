@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, MeshDistortMaterial, Sphere, useTexture, OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Github, Linkedin, Mail, Twitter, ChevronRight, Download, ExternalLink, Instagram, Send, Box, User, Code, Palette, Smartphone, Globe, Menu, X } from 'lucide-react';
+import { Github, Linkedin, Mail, Twitter, ChevronRight, Download, ExternalLink, Instagram, Send, Box, User, Code, Palette, Smartphone, Globe, Menu, X, Database, Terminal } from 'lucide-react';
 import ThreeBackground from './components/ThreeBackground';
 import LoadingScreen from './components/LoadingScreen';
 import { PORTFOLIO_DATA as data } from './data/config';
@@ -27,10 +27,10 @@ function Hero3DFrame({ imageUrl }) {
         <meshStandardMaterial color="#00ff88" emissive="#00ff88" emissiveIntensity={2} />
       </mesh>
 
-      {/* Image Panel */}
+      {/* Image Panel placeholder base */}
       <mesh position={[0, 0, 0]}>
         <circleGeometry args={[1.5, 64]} />
-        <meshBasicMaterial color="#111" />
+        <meshBasicMaterial color="#000" />
       </mesh>
       
       {/* Glow behind image */}
@@ -39,7 +39,7 @@ function Hero3DFrame({ imageUrl }) {
           color="#00ff88"
           speed={3}
           distort={0.4}
-          opacity={0.2}
+          opacity={0.1}
           transparent
         />
       </Sphere>
@@ -76,8 +76,8 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence>
-        {loading && <LoadingScreen onFinish={() => setLoading(false)} />}
+      <AnimatePresence mode="wait">
+        {loading && <LoadingScreen key="loading" onFinish={() => setLoading(false)} />}
       </AnimatePresence>
 
       <AnimatePresence>
@@ -92,13 +92,13 @@ export default function App() {
               <div className="w-24 h-24 bg-[#00ff88]/20 border border-[#00ff88]/50 rounded-2xl mx-auto flex items-center justify-center animate-bounce">
                 <Download size={40} className="text-[#00ff88]" />
               </div>
-              <h2 className="text-2xl font-black tracking-widest text-[#00ff88] uppercase">Fetching PDF...</h2>
+              <h2 className="text-2xl font-black tracking-widest text-[#00ff88] uppercase italic">Fetching PDF...</h2>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen text-white selection:bg-[#00ff88]/20 font-['Inter'] bg-[#050505]">
+      <div className="min-h-screen text-white bg-[#050505] selection:bg-[#00ff88]/20 font-inter overflow-x-hidden">
         {!loading && (
           <motion.div 
             initial={{ opacity: 0 }}
@@ -107,28 +107,28 @@ export default function App() {
           >
             <ThreeBackground />
 
-            {/* Custom Cursor Glow */}
+            {/* Global Smooth Cursor Glow */}
             <div 
-              className="fixed top-0 left-0 w-[500px] h-[500px] bg-[#00ff88]/5 pointer-events-none rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 z-0 hidden md:block"
+              className="fixed top-0 left-0 w-[600px] h-[600px] bg-[#00ff88]/10 pointer-events-none rounded-full blur-[140px] -translate-x-1/2 -translate-y-1/2 z-0 hidden lg:block transition-all duration-300 ease-out"
               style={{ left: cursorPos.x, top: cursorPos.y }}
             />
 
             {/* Navigation */}
-            <nav className="fixed top-0 w-full p-4 md:p-6 md:px-12 flex justify-between items-center z-50 glass border-b border-white/5 bg-black/10 backdrop-blur-xl">
+            <nav className="fixed top-0 w-full p-6 md:px-12 flex justify-between items-center z-50 glass border-b border-white/5 bg-black/40 backdrop-blur-2xl">
               <motion.div 
                 initial={{ opacity: 0, x: -20 }} 
                 animate={{ opacity: 1, x: 0 }} 
-                className="font-black text-xl tracking-tighter text-[#00ff88] z-50"
+                className="font-black text-2xl tracking-tighter text-[#00ff88] z-50 uppercase italic"
               >
                 {data.name}
               </motion.div>
               
-              <div className="hidden md:flex gap-12 text-[11px] font-bold tracking-[0.3em] text-white/50 uppercase">
+              <div className="hidden md:flex gap-16 text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">
                 {['About', 'Projects', 'Skills', 'Contact'].map((item) => (
                   <a 
                     key={item} 
                     href={`#${item.toLowerCase()}`} 
-                    className="hover:text-[#00ff88] transition-colors duration-300 relative group"
+                    className="hover:text-[#00ff88] transition-all duration-300 relative group"
                   >
                     {item}
                     <span className="absolute -bottom-1 left-0 w-0 h-[1.5px] bg-[#00ff88] group-hover:w-full transition-all duration-500" />
@@ -136,14 +136,14 @@ export default function App() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-4 z-50">
-                <div className="hidden sm:flex gap-4">
-                  <a href={data.socials.github} target="_blank" className="p-2 glass rounded-lg hover:border-[#00ff88]/30 transition-all opacity-40 hover:opacity-100"><Github size={16} /></a>
-                  <a href={data.socials.linkedin} target="_blank" className="p-2 glass rounded-lg hover:border-[#00ff88]/30 transition-all opacity-40 hover:opacity-100"><Linkedin size={16} /></a>
+              <div className="flex items-center gap-6 z-50">
+                <div className="hidden sm:flex gap-6">
+                  <a href={data.socials.github} target="_blank" className="p-3 glass rounded-2xl hover:border-[#00ff88]/30 transition-all opacity-40 hover:opacity-100"><Github size={18} /></a>
+                  <a href={data.socials.linkedin} target="_blank" className="p-3 glass rounded-2xl hover:border-[#00ff88]/30 transition-all opacity-40 hover:opacity-100"><Linkedin size={18} /></a>
                 </div>
                 <button 
                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                   className="md:hidden p-2 glass rounded-lg text-[#00ff88] hover:bg-[#00ff88]/10 transition-all"
+                   className="md:hidden p-3 glass rounded-2xl text-[#00ff88] hover:bg-[#00ff88]/10 transition-all"
                 >
                   {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
@@ -156,22 +156,22 @@ export default function App() {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-3xl border-b border-white/5 py-12 px-8 flex flex-col items-center gap-8 md:hidden"
+                    className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-3xl border-b border-white/5 py-16 px-12 flex flex-col items-center gap-10 md:hidden z-[100]"
                   >
                     {['About', 'Projects', 'Skills', 'Contact'].map((item) => (
                       <a 
                         key={item} 
                         href={`#${item.toLowerCase()}`} 
                         onClick={() => setIsMenuOpen(false)}
-                        className="text-2xl font-black tracking-widest text-white/50 hover:text-[#00ff88] uppercase"
+                        className="text-4xl font-black tracking-widest text-white/50 hover:text-[#00ff88] uppercase italic"
                       >
                         {item}
                       </a>
                     ))}
-                    <div className="flex gap-10 mt-6">
-                       <a href={data.socials.github} target="_blank" className="text-[#00ff88]"><Github size={24} /></a>
-                       <a href={data.socials.linkedin} target="_blank" className="text-[#00ff88]"><Linkedin size={24} /></a>
-                       <a href={data.socials.instagram} target="_blank" className="text-[#00ff88]"><Instagram size={24} /></a>
+                    <div className="flex gap-12 mt-12">
+                       <a href={data.socials.github} target="_blank" className="text-[#00ff88]"><Github size={30} /></a>
+                       <a href={data.socials.linkedin} target="_blank" className="text-[#00ff88]"><Linkedin size={30} /></a>
+                       <a href={data.socials.instagram} target="_blank" className="text-[#00ff88]"><Instagram size={30} /></a>
                     </div>
                   </motion.div>
                 )}
@@ -179,37 +179,37 @@ export default function App() {
             </nav>
 
             {/* Hero Section */}
-            <section id="home" className="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden">
-              <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <section id="home" className="relative h-screen flex items-center justify-center pt-20 px-8">
+              <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-16 items-center">
                 {/* Left: Text Content */}
                 <motion.div 
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 1, delay: 0.5 }}
-                  className="space-y-8 md:space-y-10 z-10 text-center lg:text-left order-2 lg:order-1"
+                  className="space-y-12 z-10 text-center lg:text-left order-2 lg:order-1"
                 >
-                  <div className="space-y-4">
-                    <p className="text-[#00ff88] text-[10px] md:text-sm font-black tracking-[0.5em] uppercase animate-pulse">CREATIVE_ENTITY_LOADED</p>
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] uppercase">
+                  <div className="space-y-6">
+                    <p className="text-[#00ff88] text-[10px] md:text-xs font-black tracking-[0.6em] uppercase animate-pulse">CREATIVE_ENTITY_LOADED</p>
+                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] uppercase italic">
                       {data.titlePrefix} <br />
-                      <span className="gradient-text italic">{data.titleGradient}</span><br />
+                      <span className="gradient-text non-italic font-black pr-4">{data.titleGradient}</span> <br />
                       {data.titleSuffix}
                     </h1>
                   </div>
 
-                  <p className="text-lg md:text-xl text-white/40 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
+                  <p className="text-xl md:text-2xl text-white/30 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
                     {data.tagline}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 md:gap-6 pt-4 md:pt-6 justify-center lg:justify-start">
-                    <a href="#projects" className="group px-8 md:px-12 py-4 md:py-5 bg-[#00ff88] text-black font-black text-xs tracking-widest rounded-full hover:scale-105 transition-all flex items-center gap-2 justify-center shadow-lg shadow-[#00ff88]/20">
-                      EXPLORE WORK <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  <div className="flex flex-col sm:flex-row gap-6 pt-10 justify-center lg:justify-start">
+                    <a href="#projects" className="group px-12 py-6 bg-[#00ff88] text-black font-black text-xs tracking-[0.2em] rounded-full hover:scale-105 transition-all flex items-center gap-3 justify-center shadow-2xl shadow-[#00ff88]/30">
+                      EXPLORE WORK <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </a>
                     <button 
                       onClick={handleDownload}
-                      className="px-8 md:px-12 py-4 md:py-5 glass text-white font-black text-xs tracking-widest rounded-full hover:scale-105 transition-all border border-white/10 flex items-center gap-2 justify-center"
+                      className="px-12 py-6 glass text-white font-black text-xs tracking-[0.2em] rounded-full hover:scale-105 transition-all border border-white/10 flex items-center gap-3 justify-center"
                     >
-                      GET RESUME <Download size={14} className="text-[#00ff88]" />
+                      GET RESUME <Download size={16} className="text-[#00ff88]" />
                     </button>
                   </div>
                 </motion.div>
@@ -219,19 +219,17 @@ export default function App() {
                   initial={{ opacity: 0, scale: 0.8, x: 50 }}
                   animate={{ opacity: 1, scale: 1, x: 0 }}
                   transition={{ duration: 1.2, delay: 0.8 }}
-                  className="relative flex items-center justify-center h-[400px] md:h-[500px] lg:h-[600px] overflow-visible order-1 lg:order-2"
+                  className="relative flex items-center justify-center p-8 order-1 lg:order-2"
                 >
-                  <div className="absolute inset-0 z-0 pointer-events-none">
+                  <div className="absolute inset-0 z-0 scale-125">
                      <Canvas>
-                       <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-                       <ambientLight intensity={0.5} />
-                       <pointLight position={[10, 10, 10]} intensity={1} />
+                       <ambientLight intensity={1.5} />
+                       <pointLight position={[10, 10, 10]} intensity={2} />
                        <Hero3DFrame imageUrl={data.avatar} />
                      </Canvas>
                   </div>
                   
-                  {/* Actual Image Overlay in the center of the ring */}
-                  <div className="relative w-56 h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 z-10 rounded-full border-4 border-[#00ff88]/20 p-2 overflow-hidden shadow-[0_0_50px_rgba(0,255,136,0.1)] group">
+                  <div className="relative w-72 h-72 md:w-96 md:h-96 z-10 rounded-full border-[10px] border-[#00ff88]/10 p-3 overflow-hidden shadow-[0_0_80px_rgba(0,255,136,0.15)] group">
                     <img 
                       src={data.avatar} 
                       className="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
@@ -243,17 +241,17 @@ export default function App() {
             </section>
 
             {/* About Section */}
-            <section id="about" className="py-24 md:py-32 px-6 md:px-8 max-w-4xl mx-auto relative z-10 text-center">
-              <motion.div {...fadeInUp} className="space-y-10">
-                <div className="space-y-4">
-                   <p className="text-[#00ff88] text-[10px] md:text-xs font-black tracking-[0.4em] uppercase">SYSTEM_ARCHIVE</p>
-                   <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tight leading-[0.9]">{data.aboutTitle} <br /><span className="text-white/20">{data.aboutSubtitle}</span></h2>
+            <section id="about" className="py-40 md:py-60 px-8 max-w-5xl mx-auto relative z-10 text-center">
+              <motion.div {...fadeInUp} className="space-y-16">
+                <div className="space-y-6">
+                   <p className="text-[#00ff88] text-xs font-black tracking-[0.8em] uppercase">SYSTEM_ARCHIVE</p>
+                   <h2 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none italic">{data.aboutTitle} <br /><span className="text-white/10 non-italic">{data.aboutSubtitle}</span></h2>
                 </div>
-                <div className="space-y-8">
-                  <p className="text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-[#00ff88] md:mx-auto md:max-w-2xl pl-6 md:pl-10 italic text-left">
+                <div className="space-y-12">
+                  <p className="text-2xl md:text-3xl text-white/80 leading-relaxed font-black border-l-8 border-[#00ff88] md:mx-auto md:max-w-3xl pl-16 italic text-left">
                     {data.aboutQuote}
                   </p>
-                  <p className="text-base md:text-lg text-white/40 leading-relaxed font-medium text-left md:mx-auto md:max-w-2xl">
+                  <p className="text-xl md:text-2xl text-white/40 leading-relaxed font-medium text-left md:mx-auto md:max-w-3xl">
                     {data.aboutBio}
                   </p>
                 </div>
@@ -261,44 +259,47 @@ export default function App() {
             </section>
 
             {/* Projects Section */}
-            <section id="projects" className="py-24 md:py-32 px-6 md:px-8 bg-[#0a0a0a] relative border-y border-white/5">
+            <section id="projects" className="py-40 md:py-60 px-8 bg-black/40 relative border-y border-white/5">
               <div className="max-w-7xl mx-auto z-10">
-                <div className="mb-16 md:mb-24 flex flex-col md:flex-row justify-between items-end gap-12">
-                   <div className="space-y-4">
-                     <p className="text-[#00ff88] text-[10px] md:text-xs font-black tracking-[0.5em] uppercase">COLLECTION_V4</p>
-                     <h2 className="text-5xl md:text-6xl lg:text-9xl font-black uppercase tracking-tighter leading-none italic">{data.projectsTitle} <br /><span className="text-white/20 non-italic">{data.projectsSubtitle}</span></h2>
+                <div className="mb-32 flex flex-col items-center text-center">
+                   <div className="space-y-6">
+                     <p className="text-[#00ff88] text-xs font-black tracking-[0.8em] uppercase">COLLECTION_V4</p>
+                     <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter leading-none italic">{data.projectsTitle} <br /><span className="text-white/10 non-italic">{data.projectsSubtitle}</span></h2>
                    </div>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+                <div className="grid md:grid-cols-2 gap-16 md:gap-24">
                   {data.projects.map((project, idx) => (
                     <motion.div 
                       key={idx}
                       {...fadeInUp}
                       transition={{ duration: 0.8, delay: idx * 0.1 }}
-                      className="group relative glass rounded-[40px] overflow-hidden flex flex-col border border-white/5 hover:border-[#00ff88]/30 transition-all shadow-2xl"
+                      className="group relative glass rounded-[60px] overflow-hidden flex flex-col border border-white/5 hover:border-[#00ff88]/40 transition-all shadow-3xl"
                     >
-                      <div className="h-64 md:h-96 overflow-hidden relative">
+                      <div className="h-[400px] overflow-hidden relative">
                         <img src={project.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" alt={project.title} />
+                        <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-all duration-500" />
                       </div>
-                      <div className="p-8 md:p-10 space-y-6 md:space-y-8 flex-1">
+                      <div className="p-12 md:p-16 space-y-10 flex-1">
                         <div className="flex justify-between items-start">
-                          <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none">{project.title}</h3>
-                          <span className="text-[#00ff88] font-mono text-xs md:sm">[0{idx + 1}]</span>
+                          <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none">{project.title}</h3>
+                          <span className="text-[#00ff88] font-mono text-xl opacity-20 group-hover:opacity-100 transition-opacity italic">[0{idx + 1}]</span>
                         </div>
-                        <p className="text-lg md:text-xl text-white/30 leading-snug font-medium">
+                        <p className="text-xl md:text-2xl text-white/40 leading-snug font-medium">
                           {project.description}
                         </p>
-                        <div className="flex flex-wrap gap-2 pt-4">
-                          {project.tech.map(t => <span key={t} className="text-[8px] md:text-[10px] uppercase font-black tracking-[0.2em] bg-white/[0.03] px-3 md:px-4 py-2 rounded-xl text-white/40 border border-white/5">{t}</span>)}
+                        <div className="flex flex-wrap gap-4 pt-6">
+                          {project.tech.map(t => <span key={t} className="text-[10px] uppercase font-black tracking-[0.3em] bg-[#00ff88]/5 px-5 py-3 rounded-2xl text-[#00ff88] border border-[#00ff88]/10">{t}</span>)}
                         </div>
                       </div>
-                      <div className="p-8 md:p-10 pt-0 flex justify-between items-center">
-                        <div className="flex gap-6">
-                          <a href={project.links.github} target="_blank" className="text-white/20 hover:text-[#00ff88] transition-all"><Github size={20} /></a>
-                          <a href={project.links.live} target="_blank" className="text-white/20 hover:text-[#00ff88] transition-all"><ExternalLink size={20} /></a>
+                      <div className="p-12 md:p-16 pt-0 flex justify-between items-center">
+                        <div className="flex gap-10">
+                          <a href={project.links.github} target="_blank" className="text-white/40 hover:text-[#00ff88] transition-all hover:scale-125"><Github size={28} /></a>
+                          <a href={project.links.live} target="_blank" className="text-white/40 hover:text-[#00ff88] transition-all hover:scale-125"><ExternalLink size={28} /></a>
                         </div>
-                        <ChevronRight className="text-white/10 group-hover:text-[#00ff88] group-hover:translate-x-2 transition-all" size={24} />
+                        <div className="w-20 h-20 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-[#00ff88] group-hover:text-black transition-all">
+                          <ChevronRight size={32} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -307,74 +308,74 @@ export default function App() {
             </section>
 
             {/* Skills Section */}
-            <section id="skills" className="py-24 md:py-32 px-6 md:px-8 max-w-7xl mx-auto">
-              <div className="text-center mb-16 md:mb-32 space-y-6">
-                 <p className="text-[#00ff88] text-[10px] md:text-xs font-black tracking-[0.6em] uppercase">SYSTEM.MODULES</p>
-                 <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none">Logic & Craft</h2>
+            <section id="skills" className="py-40 md:py-60 px-8 max-w-7xl mx-auto">
+              <div className="text-center mb-32 space-y-8">
+                 <p className="text-[#00ff88] text-xs font-black tracking-[1em] uppercase">SYSTEM.MODULES</p>
+                 <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter leading-none italic">Logic <span className="text-white/10">&</span> Craft</h2>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
                 {data.skills.map((skill, idx) => (
                    <motion.div 
                       key={idx}
                       {...fadeInUp}
                       transition={{ delay: idx * 0.1 }}
-                      className="group glass p-10 md:p-16 rounded-[40px] md:rounded-[60px] text-center space-y-6 md:space-y-8 flex flex-col items-center border border-white/5 hover:bg-white/[0.05] transition-all"
+                      className="group glass p-16 rounded-[60px] text-center space-y-12 flex flex-col items-center border border-white/5 hover:bg-[#00ff88]/5 hover:border-[#00ff88]/20 transition-all cursor-pointer"
                     >
-                      <div className="p-8 md:p-10 rounded-[30px] md:rounded-[40px] bg-[#00ff88]/5 relative border border-[#00ff88]/10 group-hover:rotate-12 transition-transform">
-                        <skill.icon size={40} md:size={56} className="text-[#00ff88]" />
+                      <div className="w-32 h-32 rounded-[40px] bg-black/40 relative border border-white/5 flex items-center justify-center group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-2xl">
+                        <skill.icon size={60} className="text-[#00ff88]" />
                       </div>
-                      <p className="font-black tracking-tight text-xl md:text-2xl uppercase italic">{skill.name}</p>
+                      <p className="font-black tracking-tight text-2xl uppercase italic leading-none">{skill.name}</p>
                     </motion.div>
                 ))}
               </div>
             </section>
 
             {/* Contact Section */}
-            <section id="contact" className="py-24 md:py-32 px-4 md:px-6 relative">
-              <div className="max-w-7xl mx-auto glass rounded-[40px] md:rounded-[80px] p-8 md:p-24 relative overflow-hidden border border-white/5 shadow-3xl bg-black/20">
-                <div className="grid lg:grid-cols-2 gap-16 md:gap-24 relative z-10">
-                  <div className="space-y-12 md:space-y-20">
-                    <div className="space-y-6 md:space-y-8">
-                      <p className="text-[#00ff88] text-[10px] md:text-xs font-black tracking-[0.6em] uppercase">TRANSMISSION_READY</p>
-                      <h2 className="text-5xl md:text-9xl font-black tracking-tighter leading-[0.7] uppercase">Let's <br /><span className="gradient-text tracking-[-0.05em] italic">Evolve.</span></h2>
+            <section id="contact" className="py-40 md:py-60 px-6 relative">
+              <div className="max-w-7xl mx-auto glass rounded-[80px] p-12 md:p-32 relative overflow-hidden border border-white/5 shadow-3xl bg-black/60">
+                <div className="grid lg:grid-cols-2 gap-24 md:gap-40 relative z-10">
+                  <div className="space-y-24">
+                    <div className="space-y-10">
+                      <p className="text-[#00ff88] text-xs font-black tracking-[1em] uppercase">TRANSMISSION_READY</p>
+                      <h2 className="text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.75] uppercase italic">Let's <br /><span className="gradient-text italic font-black">Evolve.</span></h2>
                     </div>
                     
-                    <div className="space-y-10 md:space-y-16">
+                    <div className="space-y-16">
                       {[
                         { icon: Mail, label: 'Email_Address', value: data.email, url: `mailto:${data.email}` },
                         { icon: Instagram, label: 'Instagram_ID', value: '@ravi_x_k', url: data.socials.instagram }
                       ].map((item, i) => (
                         <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block group">
-                          <p className="contact-label mb-2 md:mb-4 opacity-40 text-[10px] md:text-xs">{item.label}</p>
-                          <div className="flex items-center gap-4 md:gap-8 text-white/30 group-hover:text-white transition-all">
-                            <div className="p-4 md:p-6 bg-white/[0.02] rounded-2xl md:rounded-3xl group-hover:text-[#00ff88] transition-colors"><item.icon size={22} md:size={28} /></div>
-                            <span className="font-black text-xl md:text-2xl tracking-tighter break-all">{item.value}</span>
+                          <p className="text-[10px] font-black tracking-[0.5em] uppercase text-white/20 mb-6">{item.label}</p>
+                          <div className="flex items-center gap-10 text-white/30 group-hover:text-white transition-all">
+                            <div className="w-20 h-20 bg-white/[0.03] rounded-[30px] flex items-center justify-center group-hover:text-[#00ff88] group-hover:scale-110 transition-all"><item.icon size={32} /></div>
+                            <span className="font-black text-2xl md:text-3xl tracking-tighter break-all">{item.value}</span>
                           </div>
                         </a>
                       ))}
                     </div>
                   </div>
                   
-                  <div className="space-y-10 bg-white/[0.01] p-8 md:p-28 rounded-[40px] md:rounded-[80px] border border-white/5">
-                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-center">Handshake_Protocol</h3>
-                    <form className="space-y-6 md:space-y-8">
-                      <div className="space-y-2">
-                         <p className="contact-label opacity-40 text-[10px] md:text-xs">Identification</p>
-                         <input type="text" placeholder="Identity_Name" className="contact-input font-black uppercase tracking-tight text-sm" />
+                  <div className="space-y-16 bg-white/[0.01] p-12 md:p-24 rounded-[60px] md:rounded-[100px] border border-white/5 shadow-2xl">
+                    <h3 className="text-2xl font-black uppercase tracking-widest text-center italic text-white/40">Handshake_Protocol</h3>
+                    <form className="space-y-10">
+                      <div className="space-y-4">
+                         <p className="text-[10px] font-black tracking-[0.6em] uppercase text-white/10">Identification</p>
+                         <input type="text" placeholder="Identity_Name" className="w-full bg-white/[0.02] border border-white/5 rounded-3xl p-8 outline-none focus:border-[#00ff88]/30 transition-all font-black uppercase text-sm tracking-widest" />
                       </div>
-                      <div className="space-y-2">
-                         <p className="contact-label opacity-40 text-[10px] md:text-xs">Communication</p>
-                         <input type="email" placeholder="Email_Protocol" className="contact-input font-black uppercase tracking-tight text-sm" />
+                      <div className="space-y-4">
+                         <p className="text-[10px] font-black tracking-[0.6em] uppercase text-white/10">Communication</p>
+                         <input type="email" placeholder="Email_Protocol" className="w-full bg-white/[0.02] border border-white/5 rounded-3xl p-8 outline-none focus:border-[#00ff88]/30 transition-all font-black uppercase text-sm tracking-widest" />
                       </div>
-                      <div className="space-y-2">
-                         <p className="contact-label opacity-40 text-[10px] md:text-xs">Payload</p>
-                         <textarea placeholder="Your_Message" rows="3" className="contact-input font-black uppercase tracking-tight text-sm lg:resize-none" />
+                      <div className="space-y-4">
+                         <p className="text-[10px] font-black tracking-[0.6em] uppercase text-white/10">Payload</p>
+                         <textarea placeholder="Your_Message" rows="3" className="w-full bg-white/[0.02] border border-white/5 rounded-3xl p-8 outline-none focus:border-[#00ff88]/30 transition-all font-black uppercase text-sm tracking-widest resize-none" />
                       </div>
                       <button 
                         type="button"
-                        className="w-full py-6 md:py-8 bg-[#00ff88] text-black rounded-[25px] md:rounded-[35px] font-black text-xs tracking-widest uppercase hover:opacity-90 active:scale-95 transition-all shadow-[0_0_30px_rgba(0,255,136,0.2)] flex items-center justify-center gap-4"
+                        className="w-full py-10 bg-[#00ff88] text-black rounded-[40px] font-black text-xs tracking-[0.4em] uppercase hover:opacity-90 active:scale-95 transition-all shadow-[0_0_50px_rgba(0,255,136,0.3)] flex items-center justify-center gap-6"
                       >
-                        SEND_TRANSMISSION <Send size={20} />
+                        SEND_TRANSMISSION <Send size={24} />
                       </button>
                     </form>
                   </div>
@@ -383,14 +384,14 @@ export default function App() {
             </section>
 
             {/* Footer */}
-            <footer className="py-24 md:py-32 text-center border-t border-white/5 mt-20 bg-background">
-              <div className="flex justify-center gap-8 md:gap-20 mb-16 md:mb-20 flex-wrap px-4 opacity-20 hover:opacity-100 transition-opacity">
+            <footer className="py-40 text-center border-t border-white/5 mt-40 bg-black">
+              <div className="flex justify-center gap-12 md:gap-24 mb-20 flex-wrap px-8 opacity-20 hover:opacity-100 transition-opacity">
                  {['GITHUB', 'LINKEDIN', 'INSTAGRAM'].map(l => (
-                   <a key={l} href={data.socials[l.toLowerCase()]} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black tracking-widest hover:text-[#00ff88] transition-all">{l}</a>
+                   <a key={l} href={data.socials[l.toLowerCase()]} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black tracking-[0.6em] hover:text-[#00ff88] transition-all">{l}</a>
                  ))}
               </div>
-              <p className="text-[8px] md:text-[10px] text-white/10 font-black tracking-widest uppercase mb-4 px-6 leading-relaxed">
-                © 2026 {data.name} / Systems_Check: OK / All Rights Reserved
+              <p className="text-[10px] text-white/5 font-black tracking-[0.8em] uppercase mb-6 px-12 leading-loose">
+                © 2026 Archive_Root / {data.name} / Systems_Check: OK / All Rights Reserved
               </p>
             </footer>
           </motion.div>
